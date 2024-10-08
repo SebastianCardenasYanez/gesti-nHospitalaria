@@ -9,7 +9,10 @@ function App() {
     { id: '39485632', name: 'Cody Fisher', specialty: 'Cardiologists', email: 'codyf@mail.com', phone: '(229) 555-0109', dateAdded: '24/12/2022', status: 'Approved' },
   ]
 
-  const [count, setCount] = useState(0)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
 
   let style = `
   body {
@@ -135,6 +138,91 @@ function App() {
     color: #9ca3af;
     cursor: pointer;
   }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+  }
+  .modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+  }
+  .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .progress-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+  .progress-step {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .progress-step.active {
+    background-color: #2d6a4f;
+    color: white;
+  }
+  .add-doctor-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .form-row {
+    display: flex;
+    gap: 1rem;
+  }
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  .form-group input,
+  .form-group select {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+  }
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+  .next-step {
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
 `;
 
   return (
@@ -164,7 +252,7 @@ function App() {
         <div className="list-header">
           <h2>List of doctors</h2>
           <span>346 available doctors</span>
-          <button className="add-button">+ Add new doctor</button>
+          <button className="add-button" onClick={openModal}>+ Add new doctor</button>
         </div>
         <table className="table">
           <thead>
@@ -207,6 +295,65 @@ function App() {
           </tbody>
         </table>
       </main>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Add New Doctor</h2>
+            <div className="progress-bar">
+              <div className="progress-step active">1</div>
+              <div className="progress-step">2</div>
+              <div className="progress-step">3</div>
+              <div className="progress-step">4</div>
+            </div>
+            <h3>Basic Information</h3>
+            <form className="add-doctor-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="userType">User type</label>
+                  <select id="userType" name="userType">
+                    <option value="">Select user type</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="gender">Gender</label>
+                  <select id="gender" name="gender">
+                    <option value="">Select gender</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="firstName">First name</label>
+                  <input type="text" id="firstName" name="firstName" placeholder="Your first name" />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="designation">Designation</label>
+                  <input type="text" id="designation" name="designation" placeholder="Your designation" />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="lastName">Last name</label>
+                  <input type="text" id="lastName" name="lastName" placeholder="Your last name" />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="dateOfBirth">Date of birth</label>
+                  <input type="date" id="dateOfBirth" name="dateOfBirth" placeholder="Select your date of birth" />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email address</label>
+                <input type="email" id="email" name="email" placeholder="Your email" />
+              </div>
+              <div className="form-actions">
+                <button type="button" className="next-step">NEXT STEP</button>
+              </div>
+            </form>
+            <button className="close-modal" onClick={closeModal}>×</button>
+          </div>
+        </div>
+      )}
     </div>
     </>
   )
